@@ -6,9 +6,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.Instant;
 
-import static javax.persistence.FetchType.LAZY;
-import static javax.persistence.GenerationType.IDENTITY;
-
 @Data
 @Entity
 @Builder
@@ -16,7 +13,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor
 public class Post {
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
     @NotBlank(message = "Post name cannot be empty")
@@ -31,11 +28,11 @@ public class Post {
 
     private Integer voteCount = 0;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id", referencedColumnName = "id")
     private Subreddit subreddit;
 
