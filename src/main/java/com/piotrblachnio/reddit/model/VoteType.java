@@ -1,5 +1,7 @@
 package com.piotrblachnio.reddit.model;
 
+import com.piotrblachnio.reddit.exceptions.SpringRedditException;
+
 import java.util.Arrays;
 
 public enum VoteType {
