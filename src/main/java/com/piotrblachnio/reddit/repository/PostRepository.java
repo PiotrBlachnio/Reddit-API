@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CommentRepository extends JpaRepository<Comment, Long> {
-    List<Comment> findByPost(Post post);
+public interface PostRepository extends JpaRepository<Post, Long> {
+    List<Post> findAllBySubreddit(Subreddit subreddit);
 
-    List<Comment> findAllByUser(User user);
+    List<Post> findByUser(User user);
 }
