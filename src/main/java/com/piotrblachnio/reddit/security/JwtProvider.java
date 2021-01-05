@@ -8,9 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
+import java.security.*;
 import java.security.cert.CertificateException;
 
 @Service
@@ -34,5 +32,13 @@ public class JwtProvider {
                 .setSubject(principal.getUsername())
                 .signWith(getPrivateKey())
                 .compact();
+    }
+
+    private PrivateKey getPrivateKey() {
+        try {
+            return (PrivateKey) keyStore.getKey("springblog", "secret".toCharArray());
+        } catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
+            throw new SpringRedditException("Exception occurred when retrieving key from key store");
+        }
     }
 }
