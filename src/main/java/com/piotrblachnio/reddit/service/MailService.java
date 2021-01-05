@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.*;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +16,7 @@ public class MailService {
     private final JavaMailSender mailSender;
     private final MailContentBuilder mailContentBuilder;
 
+    @Async
     public void sendMail(NotificationEmail notificationEmail) {
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             var messageHelper = new MimeMessageHelper(mimeMessage);
@@ -28,8 +30,7 @@ public class MailService {
             mailSender.send(messagePreparator);
             log.info("Activation mail sent successfully");
         } catch(MailException e) {
-            throw e;
-//            throw new SpringRedditException("Exception occurred when sending a mail");
+            throw new SpringRedditException("Exception occurred when sending a mail");
         }
     }
 }
