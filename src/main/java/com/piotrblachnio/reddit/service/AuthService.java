@@ -5,10 +5,12 @@ import com.piotrblachnio.reddit.dto.RegisterRequest;
 import com.piotrblachnio.reddit.exceptions.SpringRedditException;
 import com.piotrblachnio.reddit.model.*;
 import com.piotrblachnio.reddit.repository.*;
+import com.piotrblachnio.reddit.security.JwtProvider;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,7 @@ public class AuthService {
     private final VerificationTokenRepository verificationTokenRepository;
     private final MailService mailService;
     private final AuthenticationManager authenticationManager;
+    private final JwtProvider jwtProvider;
 
     @Transactional
     public void signup(RegisterRequest registerRequest) {
@@ -68,6 +71,8 @@ public class AuthService {
     }
 
     public void login(LoginRequest loginRequest) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        var authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
+        var token = jwtProvider.generateToken(authenticate);
     }
 }
