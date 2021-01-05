@@ -61,7 +61,7 @@ public class AuthService {
 
     public void verifyAccount(String token) {
         var verificationToken = verificationTokenRepository.findByToken(token);
-        verificationToken.orElseThrow(() -> new SpringRedditException("Invalid token"));
+        fetchUserAndEnable(verificationToken.orElseThrow(() -> new SpringRedditException("Invalid token")));
     }
 
     private void fetchUserAndEnable(VerificationToken verificationToken) {
@@ -71,11 +71,11 @@ public class AuthService {
         userRepository.save(user);
     }
 
+    @Transactional
     public AuthenticationResponse login(LoginRequest loginRequest) {
         var authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         var token = jwtProvider.generateToken(authenticate);
-
         return new AuthenticationResponse(token, loginRequest.getUsername());
     }
 }
