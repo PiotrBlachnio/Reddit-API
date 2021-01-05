@@ -1,19 +1,18 @@
 package com.piotrblachnio.reddit.service;
 
+import com.piotrblachnio.reddit.dto.LoginRequest;
 import com.piotrblachnio.reddit.dto.RegisterRequest;
 import com.piotrblachnio.reddit.exceptions.SpringRedditException;
-import com.piotrblachnio.reddit.model.NotificationEmail;
-import com.piotrblachnio.reddit.model.User;
-import com.piotrblachnio.reddit.model.VerificationToken;
-import com.piotrblachnio.reddit.repository.UserRepository;
-import com.piotrblachnio.reddit.repository.VerificationTokenRepository;
+import com.piotrblachnio.reddit.model.*;
+import com.piotrblachnio.reddit.repository.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
-import javax.validation.constraints.NotBlank;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -25,6 +24,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private final MailService mailService;
+    private final AuthenticationManager authenticationManager;
 
     @Transactional
     public void signup(RegisterRequest registerRequest) {
@@ -65,5 +65,9 @@ public class AuthService {
         var user = userRepository.findByUsername(username).orElseThrow(() -> new SpringRedditException("User with this username not found"));
         user.setEnabled(true);
         userRepository.save(user);
+    }
+
+    public void login(LoginRequest loginRequest) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
     }
 }
