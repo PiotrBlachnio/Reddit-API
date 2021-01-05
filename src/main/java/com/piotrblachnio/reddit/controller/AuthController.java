@@ -1,5 +1,6 @@
 package com.piotrblachnio.reddit.controller;
 
+import com.piotrblachnio.reddit.dto.AuthenticationResponse;
 import com.piotrblachnio.reddit.dto.LoginRequest;
 import com.piotrblachnio.reddit.dto.RegisterRequest;
 import com.piotrblachnio.reddit.service.AuthService;
@@ -28,7 +29,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public void login(@RequestBody LoginRequest loginRequest) {
-        authService.login(loginRequest);
+    public AuthenticationResponse login(@RequestBody LoginRequest loginRequest) {
+        return authService.login(loginRequest);
     }
 }

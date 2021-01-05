@@ -1,5 +1,6 @@
 package com.piotrblachnio.reddit.service;
 
+import com.piotrblachnio.reddit.dto.AuthenticationResponse;
 import com.piotrblachnio.reddit.dto.LoginRequest;
 import com.piotrblachnio.reddit.dto.RegisterRequest;
 import com.piotrblachnio.reddit.exceptions.SpringRedditException;
@@ -70,9 +71,11 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    public void login(LoginRequest loginRequest) {
+    public AuthenticationResponse login(LoginRequest loginRequest) {
         var authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         var token = jwtProvider.generateToken(authenticate);
+
+        return new AuthenticationResponse(token, loginRequest.getUsername());
     }
 }
