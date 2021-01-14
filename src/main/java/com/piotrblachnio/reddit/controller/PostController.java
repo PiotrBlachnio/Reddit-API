@@ -1,6 +1,7 @@
 package com.piotrblachnio.reddit.controller;
 
 import com.piotrblachnio.reddit.dto.PostRequest;
+import com.piotrblachnio.reddit.dto.PostResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
