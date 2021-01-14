@@ -34,7 +34,7 @@ public class PostController {
 
     @GetMapping("/by-subreddit/${id}")
     public List<PostResponse> getPostsBySubreddit(Long id) {
-        return postSerice.getPostsBySubreddit(id);
+        return postService.getPostsBySubreddit(id);
     }
 
     @GetMapping("/by-user/${name}")
