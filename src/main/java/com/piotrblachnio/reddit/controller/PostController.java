@@ -19,28 +19,27 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity createPost(@RequestBody PostRequest postRequest) {
+    public ResponseEntity<Void> createPost(@RequestBody PostRequest postRequest) {
         postService.save(postRequest);
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<PostResponse>> getAllPosts() {
         return status(HttpStatus.OK).body(postService.getAllPosts());
     }
 
-    @GetMapping("/${id}")
+    @GetMapping("/{id}")
     public ResponseEntity<PostResponse> getPost(@PathVariable Long id) {
         return status(HttpStatus.OK).body(postService.getPost(id));
     }
 
-
-    @GetMapping("/by-subreddit/${id}")
+    @GetMapping("/by-subreddit/{id}")
     public ResponseEntity<List<PostResponse>> getPostsBySubreddit(Long id) {
         return status(HttpStatus.OK).body(postService.getPostsBySubreddit(id));
     }
 
-    @GetMapping("/by-user/${name}")
+    @GetMapping("/by-user/{name}")
     public ResponseEntity<List<PostResponse>> getPostsByUsername(String username) {
         return status(HttpStatus.OK).body(postService.getPostsByUsername(username));
     }

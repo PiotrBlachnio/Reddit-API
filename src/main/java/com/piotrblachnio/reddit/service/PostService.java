@@ -30,13 +30,13 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-    public Post save(PostRequest postRequest) {
+    public void save(PostRequest postRequest) {
         var subreddit = subredditRepository.findByName(postRequest.getSubredditName())
                 .orElseThrow(() -> new SubredditNotFoundException(postRequest.getSubredditName()));
 
         var currentUser = authService.getCurrentUser();
 
-        return postMapper.map(postRequest, subreddit, currentUser);
+        postRepository.save(postMapper.map(postRequest, subreddit, currentUser));
     }
 
     @Transactional(readOnly = true)
