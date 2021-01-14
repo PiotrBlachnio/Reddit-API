@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 
 import java.util.List;
 
+import static org.springframework.http.ResponseEntity.status;
+
 @RestController
 @RequestMapping("/api/post")
 @AllArgsConstructor
@@ -22,23 +24,24 @@ public class PostController {
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
-    @GetMapping("/${id}")
-    public PostResponse getPost(@PathVariable Long id) {
-        return postService.getPost(id);
+    @GetMapping("/")
+    public ResponseEntity<List<PostResponse>> getAllPosts() {
+        return status(HttpStatus.OK).body(postService.getAllPosts());
     }
 
-    @GetMapping("/")
-    public List<PostResponse> getAllPosts() {
-        return postService.getAllPosts();
+    @GetMapping("/${id}")
+    public ResponseEntity<PostResponse> getPost(@PathVariable Long id) {
+        return status(HttpStatus.OK).body(postService.getPost(id));
     }
+
 
     @GetMapping("/by-subreddit/${id}")
-    public List<PostResponse> getPostsBySubreddit(Long id) {
-        return postService.getPostsBySubreddit(id);
+    public ResponseEntity<List<PostResponse>> getPostsBySubreddit(Long id) {
+        return status(HttpStatus.OK).body(postService.getPostsBySubreddit(id));
     }
 
     @GetMapping("/by-user/${name}")
-    public List<PostResponse> getPostsByUsername(String username) {
-        return postService.getPostsByUsername(username);
+    public ResponseEntity<List<PostResponse>> getPostsByUsername(String username) {
+        return status(HttpStatus.OK).body(postService.getPostsByUsername(username));
     }
 }
