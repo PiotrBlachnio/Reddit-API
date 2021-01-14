@@ -2,10 +2,13 @@ package com.piotrblachnio.reddit.controller;
 
 import com.piotrblachnio.reddit.dto.PostRequest;
 import com.piotrblachnio.reddit.dto.PostResponse;
+import com.piotrblachnio.reddit.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.AllArgsConstructor;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/post")
