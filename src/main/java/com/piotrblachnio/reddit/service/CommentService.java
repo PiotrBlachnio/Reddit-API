@@ -4,12 +4,18 @@ import com.piotrblachnio.reddit.dto.CommentDto;
 import com.piotrblachnio.reddit.exceptions.PostNotFoundException;
 import com.piotrblachnio.reddit.mapper.CommentMapper;
 import com.piotrblachnio.reddit.model.NotificationEmail;
+import com.piotrblachnio.reddit.model.Post;
 import com.piotrblachnio.reddit.model.User;
 import com.piotrblachnio.reddit.repository.CommentRepository;
 import com.piotrblachnio.reddit.repository.PostRepository;
 import com.piotrblachnio.reddit.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @AllArgsConstructor
@@ -36,5 +42,21 @@ public class CommentService {
 
     private void sendCommentNotification(String message, User user) {
         mailService.sendMail(new NotificationEmail(user.getUsername() + " Commented on your post", user.getEmail(), message));
+    }
+
+    public List<CommentDto> getAllCommentsForPost(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException(postId.toString()));
+        return commentRepository.findByPost(post)
+                .stream()
+                .map(commentMapper::mapToDto).collect(toList());
+    }
+
+    public List<CommentDto> getAllCommentsForUser(String userName) {
+        User user = userRepository.findByUsername(userName)
+                .orElseThrow(() -> new UsernameNotFoundException(userName));
+        return commentRepository.findAllByUser(user)
+                .stream()
+                .map(commentMapper::mapToDto)
+                .collect(toList());
     }
 }
