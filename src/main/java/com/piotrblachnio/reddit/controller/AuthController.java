@@ -2,12 +2,15 @@ package com.piotrblachnio.reddit.controller;
 
 import com.piotrblachnio.reddit.dto.AuthenticationResponse;
 import com.piotrblachnio.reddit.dto.LoginRequest;
+import com.piotrblachnio.reddit.dto.RefreshTokenRequest;
 import com.piotrblachnio.reddit.dto.RegisterRequest;
 import com.piotrblachnio.reddit.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor
@@ -31,5 +34,10 @@ public class AuthController {
     @PostMapping("/login")
     public AuthenticationResponse login(@RequestBody LoginRequest loginRequest) {
         return authService.login(loginRequest);
+    }
+
+    @PostMapping("/refresh/token")
+    public AuthenticationResponse refreshTokens(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+        return authService.refreshToken(refreshTokenRequest);
     }
 }
