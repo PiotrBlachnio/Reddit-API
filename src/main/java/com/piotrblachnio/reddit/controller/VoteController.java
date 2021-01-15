@@ -1,5 +1,7 @@
 package com.piotrblachnio.reddit.controller;
 
+import com.piotrblachnio.reddit.dto.VoteDto;
+import com.piotrblachnio.reddit.service.VoteService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
