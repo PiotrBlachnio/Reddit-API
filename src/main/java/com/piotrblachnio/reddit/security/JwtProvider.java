@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.time.Instant;
+import java.util.Date;
 
 import static io.jsonwebtoken.Jwts.parser;
 import static java.util.Date.from;
@@ -72,6 +73,15 @@ public class JwtProvider {
                 .getBody();
 
         return claims.getSubject();
+    }
+
+    public String generateTokenWithUserName(String username) {
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(from(Instant.now()))
+                .signWith(getPrivateKey())
+                .setExpiration(Date.from(Instant.now().plusMillis(jwtExpirationInMillis)))
+                .compact();
     }
 
     public Long getJwtExpirationInMillis() {

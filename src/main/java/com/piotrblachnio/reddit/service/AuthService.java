@@ -32,6 +32,7 @@ public class AuthService {
     private final MailService mailService;
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
+    private final RefreshTokenService refreshTokenService;
 
     @Transactional
     public void signup(RegisterRequest registerRequest) {
@@ -89,7 +90,7 @@ public class AuthService {
         var token = jwtProvider.generateToken(authenticate);
         return AuthenticationResponse.builder()
                 .authenticationToken(token)
-                .refreshToken("")
+                .refreshToken(refreshTokenService.generateRefreshToken().getToken())
                 .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
                 .username(loginRequest.getUsername())
                 .build();
