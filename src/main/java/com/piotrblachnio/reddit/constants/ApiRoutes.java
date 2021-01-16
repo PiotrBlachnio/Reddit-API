@@ -38,4 +38,10 @@ public class ApiRoutes {
         public static final String GET_ALL = _prefix;
         public static final String GET_BY_ID = _prefix + "/{id}";
     }
+
+    public static class Vote {
+        private static final String _prefix = _versionPrefix + "/vote";
+
+        public static final String ADD = _prefix;
+    }
 }

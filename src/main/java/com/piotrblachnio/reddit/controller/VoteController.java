@@ -1,24 +1,21 @@
 package com.piotrblachnio.reddit.controller;
 
+import com.piotrblachnio.reddit.constants.ApiRoutes;
 import com.piotrblachnio.reddit.dto.VoteDto;
 import com.piotrblachnio.reddit.service.VoteService;
-import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping("/api/vote")
 @AllArgsConstructor
 public class VoteController {
     private final VoteService voteService;
 
-    @PostMapping
-    public ResponseEntity<Void> vote(@RequestBody VoteDto voteDto) {
+    @PostMapping(ApiRoutes.Vote.ADD)
+    public ResponseEntity add(@RequestBody VoteDto voteDto) {
         voteService.vote(voteDto);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
