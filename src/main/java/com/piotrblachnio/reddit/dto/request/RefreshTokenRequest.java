@@ -1,13 +1,11 @@
-package com.piotrblachnio.reddit.dto;
+package com.piotrblachnio.reddit.dto.request;
 
 import lombok.*;
-import javax.validation.constraints.NotBlank;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class RefreshTokenRequest {
-    @NotBlank
     private String refreshToken;
     private String username;
 }

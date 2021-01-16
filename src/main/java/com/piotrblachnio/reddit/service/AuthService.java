@@ -1,9 +1,9 @@
 package com.piotrblachnio.reddit.service;
 
 import com.piotrblachnio.reddit.dto.AuthenticationResponse;
-import com.piotrblachnio.reddit.dto.LoginRequest;
-import com.piotrblachnio.reddit.dto.RefreshTokenRequest;
-import com.piotrblachnio.reddit.dto.RegisterRequest;
+import com.piotrblachnio.reddit.dto.request.LoginRequest;
+import com.piotrblachnio.reddit.dto.request.RefreshTokenRequest;
+import com.piotrblachnio.reddit.dto.request.RegisterRequest;
 import com.piotrblachnio.reddit.exceptions.SpringRedditException;
 import com.piotrblachnio.reddit.model.*;
 import com.piotrblachnio.reddit.repository.*;

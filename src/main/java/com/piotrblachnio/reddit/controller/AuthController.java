@@ -1,23 +1,17 @@
 package com.piotrblachnio.reddit.controller;
 
 import com.piotrblachnio.reddit.constants.ApiRoutes;
-import com.piotrblachnio.reddit.dto.AuthenticationResponse;
-import com.piotrblachnio.reddit.dto.LoginRequest;
-import com.piotrblachnio.reddit.dto.RefreshTokenRequest;
-import com.piotrblachnio.reddit.dto.RegisterRequest;
-import com.piotrblachnio.reddit.service.AuthService;
-import com.piotrblachnio.reddit.service.RefreshTokenService;
-import lombok.AllArgsConstructor;
+import com.piotrblachnio.reddit.dto.*;
+import com.piotrblachnio.reddit.dto.request.*;
+import com.piotrblachnio.reddit.service.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
+import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
 public class AuthController {
-
     private final AuthService authService;
     private final RefreshTokenService refreshTokenService;
 
@@ -33,13 +27,13 @@ public class AuthController {
     }
 
     @PostMapping(ApiRoutes.Auth.LOGOUT)
-    public ResponseEntity<String> logout(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+    public ResponseEntity<String> logout(@RequestBody RefreshTokenRequest refreshTokenRequest) {
         refreshTokenService.deleteRefreshToken(refreshTokenRequest.getRefreshToken());
         return ResponseEntity.status(HttpStatus.OK).body("Refresh Token Deleted Successfully!!");
     }
 
     @PostMapping(ApiRoutes.Auth.REFRESH_TOKEN)
-    public AuthenticationResponse refreshTokens(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+    public AuthenticationResponse refreshTokens(@RequestBody RefreshTokenRequest refreshTokenRequest) {
         return authService.refreshToken(refreshTokenRequest);
     }
 
