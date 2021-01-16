@@ -1,5 +1,6 @@
 package com.piotrblachnio.reddit.controller;
 
+import com.piotrblachnio.reddit.constants.ApiRoutes;
 import com.piotrblachnio.reddit.dto.AuthenticationResponse;
 import com.piotrblachnio.reddit.dto.LoginRequest;
 import com.piotrblachnio.reddit.dto.RefreshTokenRequest;
@@ -15,37 +16,36 @@ import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/auth")
 public class AuthController {
 
     private final AuthService authService;
     private final RefreshTokenService refreshTokenService;
 
-    @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody RegisterRequest registerRequest) {
+    @PostMapping(ApiRoutes.Auth.REGISTER)
+    public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
         authService.signup(registerRequest);
         return new ResponseEntity("User registered successfully", HttpStatus.CREATED);
     }
 
-    @GetMapping("/accountVerification/{token}")
-    public ResponseEntity<String> verifyAccount(@PathVariable String token) {
-        authService.verifyAccount(token);
-        return new ResponseEntity("Account verified successfully", HttpStatus.OK);
-    }
-
-    @PostMapping("/login")
+    @PostMapping(ApiRoutes.Auth.LOGIN)
     public AuthenticationResponse login(@RequestBody LoginRequest loginRequest) {
         return authService.login(loginRequest);
     }
 
-    @PostMapping("/refresh/token")
+    @PostMapping(ApiRoutes.Auth.LOGOUT)
+    public ResponseEntity<String> logout(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+        refreshTokenService.deleteRefreshToken(refreshTokenRequest.getRefreshToken());
+        return ResponseEntity.status(HttpStatus.OK).body("Refresh Token Deleted Successfully!!");
+    }
+
+    @PostMapping(ApiRoutes.Auth.REFRESH_TOKEN)
     public AuthenticationResponse refreshTokens(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
         return authService.refreshToken(refreshTokenRequest);
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
-        refreshTokenService.deleteRefreshToken(refreshTokenRequest.getRefreshToken());
-        return ResponseEntity.status(HttpStatus.OK).body("Refresh Token Deleted Successfully!!");
+    @GetMapping(ApiRoutes.Auth.CONFIRM_EMAIL)
+    public ResponseEntity<String> confirmEmail(@PathVariable String token) {
+        authService.verifyAccount(token);
+        return new ResponseEntity("Account verified successfully", HttpStatus.OK);
     }
 }
