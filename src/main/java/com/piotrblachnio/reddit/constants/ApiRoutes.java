@@ -17,7 +17,17 @@ public class ApiRoutes {
         private static final String _prefix = _versionPrefix + "/comment";
 
         public static final String CREATE = _prefix;
-        public static final String GET_BY_POST = _prefix + "/by-post/{postId}";
+        public static final String GET_BY_POST = _prefix + "/by-post/{id}";
         public static final String GET_BY_USER = _prefix + "/by-user/{username}";
+    }
+
+    public static class Post {
+        private static final String _prefix = _versionPrefix + "/post";
+
+        public static final String CREATE = _prefix;
+        public static final String GET_ALL = _prefix;
+        public static final String GET_BY_ID = _prefix + "/{id}";
+        public static final String GET_BY_SUBREDDIT = _prefix + "/by-subreddit/${id}";
+        public static final String GET_BY_USER = _prefix + "/by-user/${username}";
     }
 }
