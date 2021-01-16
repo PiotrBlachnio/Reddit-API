@@ -1,13 +1,23 @@
 package com.piotrblachnio.reddit.constants;
 
 public class ApiRoutes {
-    private static final String _prefix = "/api/v1";
+    private static final String _versionPrefix = "/api/v1";
 
     public static class Auth {
-        public static final String REGISTER = _prefix + "/auth/register";
-        public static final String LOGIN = _prefix + "/auth/login";
-        public static final String LOGOUT = _prefix + "/auth/logout";
-        public static final String REFRESH_TOKEN = _prefix + "/auth/refresh-token";
-        public static final String CONFIRM_EMAIL = _prefix + "/auth/confirm-email/{token}";
+        private static final String _prefix = _versionPrefix + "/auth";
+
+        public static final String REGISTER = _prefix + "/register";
+        public static final String LOGIN = _prefix + "/login";
+        public static final String LOGOUT = _prefix + "/logout";
+        public static final String REFRESH_TOKEN = _prefix + "/refresh-token";
+        public static final String CONFIRM_EMAIL = _prefix + "/confirm-email/{token}";
+    }
+
+    public static class Comment {
+        private static final String _prefix = _versionPrefix + "/comment";
+
+        public static final String CREATE = _prefix;
+        public static final String GET_BY_POST = _prefix + "/by-post/{postId}";
+        public static final String GET_BY_USER = _prefix + "/by-user/{username}";
     }
 }

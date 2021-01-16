@@ -1,35 +1,32 @@
 package com.piotrblachnio.reddit.controller;
 
+import com.piotrblachnio.reddit.constants.ApiRoutes;
 import com.piotrblachnio.reddit.dto.CommentDto;
 import com.piotrblachnio.reddit.service.CommentService;
-import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-
+import lombok.AllArgsConstructor;
 import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/comment")
 public class CommentController {
     private final CommentService commentService;
 
-    @PostMapping
+    @PostMapping(ApiRoutes.Comment.CREATE)
     public ResponseEntity<Void> createComment(@RequestBody CommentDto commentDto) {
         commentService.save(commentDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/by-post/{postId}")
+    @GetMapping(ApiRoutes.Comment.GET_BY_POST)
     public ResponseEntity<List<CommentDto>> getAllCommentsByPost(@PathVariable Long postId) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(commentService.getAllCommentsForPost(postId));
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.getAllCommentsForPost(postId));
+
     }
 
-    @GetMapping("/by-user/{userName}")
-    public ResponseEntity<List<CommentDto>> getAllCommentsByUser(@PathVariable String userName) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(commentService.getAllCommentsForUser(userName));
+    @GetMapping(ApiRoutes.Comment.GET_BY_USER)
+    public ResponseEntity<List<CommentDto>> getAllCommentsByUser(@PathVariable String username) {
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.getAllCommentsForUser(username));
     }
 }
