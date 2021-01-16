@@ -27,7 +27,15 @@ public class ApiRoutes {
         public static final String CREATE = _prefix;
         public static final String GET_ALL = _prefix;
         public static final String GET_BY_ID = _prefix + "/{id}";
-        public static final String GET_BY_SUBREDDIT = _prefix + "/by-subreddit/${id}";
-        public static final String GET_BY_USER = _prefix + "/by-user/${username}";
+        public static final String GET_BY_SUBREDDIT = _prefix + "/by-subreddit/{id}";
+        public static final String GET_BY_USER = _prefix + "/by-user/{username}";
+    }
+
+    public static class Subreddit {
+        private static final String _prefix = _versionPrefix + "/subreddit";
+
+        public static final String CREATE = _prefix;
+        public static final String GET_ALL = _prefix;
+        public static final String GET_BY_ID = _prefix + "/{id}";
     }
 }

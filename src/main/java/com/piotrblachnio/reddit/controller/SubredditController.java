@@ -1,39 +1,30 @@
 package com.piotrblachnio.reddit.controller;
 
+import com.piotrblachnio.reddit.constants.ApiRoutes;
 import com.piotrblachnio.reddit.dto.SubredditDto;
 import com.piotrblachnio.reddit.service.SubredditService;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.http.*;
+import lombok.AllArgsConstructor;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/subreddit")
 @AllArgsConstructor
-@Slf4j
 public class SubredditController {
     private final SubredditService subredditService;
 
-    @PostMapping
-    public ResponseEntity<SubredditDto> createSubreddit(@RequestBody SubredditDto subredditDto) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(subredditService.save(subredditDto));
+    @PostMapping(ApiRoutes.Subreddit.CREATE)
+    public ResponseEntity<SubredditDto> create(@RequestBody SubredditDto subredditDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(subredditService.save(subredditDto));
     }
 
-    @GetMapping
-    public ResponseEntity<List<SubredditDto>> getAllSubreddits() {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(subredditService.getAll());
+    @GetMapping(ApiRoutes.Subreddit.GET_ALL)
+    public ResponseEntity<List<SubredditDto>> getAll() {
+        return ResponseEntity.status(HttpStatus.OK).body(subredditService.getAll());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<SubredditDto> getSubreddit(@PathVariable Long id) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(subredditService.getSubreddit(id));
+    @GetMapping(ApiRoutes.Subreddit.GET_BY_ID)
+    public ResponseEntity<SubredditDto> getById(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(subredditService.getSubreddit(id));
     }
 }
