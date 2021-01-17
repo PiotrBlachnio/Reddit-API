@@ -7,14 +7,20 @@ import lombok.*;
 @AllArgsConstructor
 @Data
 public class ExceptionResponse {
-    private String message;
-    private Integer id;
+    private final Error error;
+
+    @AllArgsConstructor
+    @Data
+    private static class Error {
+        private final String message;
+        private final Integer id;
+    }
 
     public static ExceptionResponse fromRuntimeException(RuntimeException exception) {
-        return new ExceptionResponse(exception.getMessage(), Exception.INTERNAL_SERVER_ERROR);
+        return new ExceptionResponse(new Error(exception.getMessage(), Exception.INTERNAL_SERVER_ERROR));
     }
 
     public static ExceptionResponse fromBaseException(BaseException exception) {
-        return new ExceptionResponse(exception.getMessage(), exception.getId());
+        return new ExceptionResponse(new Error(exception.getMessage(), exception.getId()));
     }
 }

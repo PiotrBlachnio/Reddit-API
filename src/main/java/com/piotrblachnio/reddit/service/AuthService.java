@@ -2,13 +2,12 @@ package com.piotrblachnio.reddit.service;
 
 import com.piotrblachnio.reddit.dto.response.AuthenticationResponse;
 import com.piotrblachnio.reddit.dto.request.*;
-import com.piotrblachnio.reddit.exceptions.SpringRedditException;
+import com.piotrblachnio.reddit.exceptions.*;
 import com.piotrblachnio.reddit.mapper.UserMapper;
 import com.piotrblachnio.reddit.model.*;
 import com.piotrblachnio.reddit.repository.*;
 import com.piotrblachnio.reddit.security.JwtProvider;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,7 +20,6 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-@Slf4j
 public class AuthService {
     private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
@@ -34,11 +32,11 @@ public class AuthService {
     @Transactional
     public void register(RegisterRequest registerRequest) {
         userRepository.findByEmail(registerRequest.getEmail()).ifPresent(value -> {
-            throw new SpringRedditException("Provided email already exists");
+            throw new DuplicateEmailException();
         });
 
         userRepository.findByUsername(registerRequest.getUsername()).ifPresent(value -> {
-            throw new SpringRedditException("Provided username already exists");
+            throw new DuplicateUsernameException();
         });
 
         var user = userMapper.mapRegisterRequestToUser(registerRequest);
