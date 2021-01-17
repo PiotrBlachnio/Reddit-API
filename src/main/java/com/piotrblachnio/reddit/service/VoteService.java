@@ -1,6 +1,6 @@
 package com.piotrblachnio.reddit.service;
 
-import com.piotrblachnio.reddit.dto.VoteDto;
+import com.piotrblachnio.reddit.dto.request.VoteRequest;
 import com.piotrblachnio.reddit.exceptions.PostNotFoundException;
 import com.piotrblachnio.reddit.exceptions.SpringRedditException;
 import com.piotrblachnio.reddit.model.Post;
@@ -22,28 +22,28 @@ public class VoteService {
     private final AuthService authService;
 
     @Transactional
-    public void vote(VoteDto voteDto) {
-        var post = postRepository.findById(voteDto.getPostId())
-                .orElseThrow(() -> new PostNotFoundException("Post Not Found with ID - " + voteDto.getPostId()));
+    public void vote(VoteRequest voteRequest) {
+        var post = postRepository.findById(voteRequest.getPostId())
+                .orElseThrow(() -> new PostNotFoundException("Post Not Found with ID - " + voteRequest.getPostId()));
         var voteByPostAndUser = voteRepository.findTopByPostAndUserOrderByVoteIdDesc(post, authService.getCurrentUser());
         if (voteByPostAndUser.isPresent() &&
                 voteByPostAndUser.get().getVoteType()
-                        .equals(voteDto.getVoteType())) {
+                        .equals(voteRequest.getVoteType())) {
             throw new SpringRedditException("You have already "
-                    + voteDto.getVoteType() + "'d for this post");
+                    + voteRequest.getVoteType() + "'d for this post");
         }
-        if (UPVOTE.equals(voteDto.getVoteType())) {
+        if (UPVOTE.equals(voteRequest.getVoteType())) {
             post.setVoteCount(post.getVoteCount() + 1);
         } else {
             post.setVoteCount(post.getVoteCount() - 1);
         }
-        voteRepository.save(mapToVote(voteDto, post));
+        voteRepository.save(mapToVote(voteRequest, post));
         postRepository.save(post);
     }
 
-    private Vote mapToVote(VoteDto voteDto, Post post) {
+    private Vote mapToVote(VoteRequest voteRequest, Post post) {
         return Vote.builder()
-                .voteType(voteDto.getVoteType())
+                .voteType(voteRequest.getVoteType())
                 .post(post)
                 .user(authService.getCurrentUser())
                 .build();
