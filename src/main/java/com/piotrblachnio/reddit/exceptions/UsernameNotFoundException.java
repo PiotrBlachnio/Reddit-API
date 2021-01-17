@@ -1,7 +1,6 @@
 package com.piotrblachnio.reddit.exceptions;
 
-public class UsernameNotFoundException extends RuntimeException {
-    public UsernameNotFoundException(String message) {
-        super();
-    }
-}
+import lombok.Data;
+
+@Data
+public class UsernameNotFoundException extends BaseException {}
