@@ -3,13 +3,18 @@ package com.piotrblachnio.reddit.model;
 import lombok.*;
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.UUID;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "token")
 public class VerificationToken {
+    private static final Integer MINUTES_30 = 1800000;
+
+    public VerificationToken(User user) {
+        this.user = user;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,7 +22,7 @@ public class VerificationToken {
     @OneToOne(fetch = FetchType.LAZY)
     private User user;
 
-    private String token;
+    private String token = UUID.randomUUID().toString();
 
-    private Instant expiryDate;
+    private Instant expiryDate = Instant.now().plusMillis(MINUTES_30);
 }

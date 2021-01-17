@@ -1,9 +1,7 @@
 package com.piotrblachnio.reddit.service;
 
 import com.piotrblachnio.reddit.dto.response.AuthenticationResponse;
-import com.piotrblachnio.reddit.dto.request.LoginRequest;
-import com.piotrblachnio.reddit.dto.request.RefreshTokenRequest;
-import com.piotrblachnio.reddit.dto.request.RegisterRequest;
+import com.piotrblachnio.reddit.dto.request.*;
 import com.piotrblachnio.reddit.exceptions.SpringRedditException;
 import com.piotrblachnio.reddit.mapper.UserMapper;
 import com.piotrblachnio.reddit.model.*;
@@ -11,9 +9,7 @@ import com.piotrblachnio.reddit.repository.*;
 import com.piotrblachnio.reddit.security.JwtProvider;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -40,32 +36,14 @@ public class AuthService {
 
         userRepository.save(user);
 
-        var token = generateVerificationToken(user);
+        var token = _generateVerificationToken(user);
 
         mailService.sendMail(new NotificationEmail("Please activate your account", user.getEmail(),"http://localhost:8080/api/v1/auth/confirm-email/" + token));
-    }
-
-    private String generateVerificationToken(User user) {
-        var token = UUID.randomUUID().toString();
-        var verificationToken = new VerificationToken();
-
-        verificationToken.setToken(token);
-        verificationToken.setUser(user);
-
-        verificationTokenRepository.save(verificationToken);
-        return token;
     }
 
     public void verifyAccount(String token) {
         var verificationToken = verificationTokenRepository.findByToken(token);
         fetchUserAndEnable(verificationToken.orElseThrow(() -> new SpringRedditException("Invalid token")));
-    }
-
-    private void fetchUserAndEnable(VerificationToken verificationToken) {
-        var username = verificationToken.getUser().getUsername();
-        var user = userRepository.findByUsername(username).orElseThrow(() -> new SpringRedditException("User with this username not found"));
-        user.setEnabled(true);
-        userRepository.save(user);
     }
 
     @Transactional(readOnly = true)
@@ -89,11 +67,6 @@ public class AuthService {
                 .build();
     }
 
-    public boolean isLoggedIn() {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
-    }
-
     public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
         refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
         String token = jwtProvider.generateTokenWithUserName(refreshTokenRequest.getUsername());
@@ -103,5 +76,27 @@ public class AuthService {
                 .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
                 .username(refreshTokenRequest.getUsername())
                 .build();
+    }
+
+    public boolean isLoggedIn() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
+    }
+
+    private String _generateVerificationToken(User user) {
+        var token = UUID.randomUUID().toString();
+
+        var verificationToken = new VerificationToken(user);
+
+        verificationTokenRepository.save(verificationToken);
+
+        return token;
+    }
+
+    private void fetchUserAndEnable(VerificationToken verificationToken) {
+        var username = verificationToken.getUser().getUsername();
+        var user = userRepository.findByUsername(username).orElseThrow(() -> new SpringRedditException("User with this username not found"));
+        user.setEnabled(true);
+        userRepository.save(user);
     }
 }
