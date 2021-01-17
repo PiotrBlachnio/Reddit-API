@@ -1,15 +1,12 @@
-package com.piotrblachnio.reddit.dto;
+package com.piotrblachnio.reddit.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import java.time.Instant;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentDto {
+public class CommentRequest {
     private Long id;
     private Long postId;
     private Instant createdDate;
