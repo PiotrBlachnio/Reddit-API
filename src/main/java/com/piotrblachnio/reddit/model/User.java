@@ -2,7 +2,6 @@ package com.piotrblachnio.reddit.model;
 
 import lombok.*;
 import javax.persistence.*;
-import javax.validation.constraints.*;
 import java.time.Instant;
 
 @Data
@@ -14,17 +13,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @NotBlank(message = "Username cannot be empty")
     private String username;
 
-    @NotBlank(message = "Password cannot be empty")
     private String password;
 
-    @Email
-    @NotEmpty(message = "Email cannot be empty")
     private String email;
 
-    private Instant created;
+    private Instant created = Instant.now();
 
-    private boolean enabled;
+    private boolean enabled = false;
 }

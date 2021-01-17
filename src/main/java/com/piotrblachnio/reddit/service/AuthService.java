@@ -5,6 +5,7 @@ import com.piotrblachnio.reddit.dto.request.LoginRequest;
 import com.piotrblachnio.reddit.dto.request.RefreshTokenRequest;
 import com.piotrblachnio.reddit.dto.request.RegisterRequest;
 import com.piotrblachnio.reddit.exceptions.SpringRedditException;
+import com.piotrblachnio.reddit.mapper.UserMapper;
 import com.piotrblachnio.reddit.model.*;
 import com.piotrblachnio.reddit.repository.*;
 import com.piotrblachnio.reddit.security.JwtProvider;
@@ -15,7 +16,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,30 +26,23 @@ import java.util.UUID;
 @AllArgsConstructor
 @Slf4j
 public class AuthService {
-    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private final MailService mailService;
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
+    private final UserMapper userMapper;
 
     @Transactional
     public void register(RegisterRequest registerRequest) {
-        User user = new User();
-
-        user.setUsername(registerRequest.getUsername());
-        user.setEmail(registerRequest.getEmail());
-        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        user.setCreated(Instant.now());
-        user.setEnabled(false);
+        var user = userMapper.mapRegisterRequestToUser(registerRequest);
 
         userRepository.save(user);
 
         var token = generateVerificationToken(user);
-        mailService.sendMail(new NotificationEmail
-        ("Please activate your account", user.getEmail(),
-                "http://localhost:8080/api/auth/accountVerification/" + token));
+
+        mailService.sendMail(new NotificationEmail("Please activate your account", user.getEmail(),"http://localhost:8080/api/v1/auth/confirm-email/" + token));
     }
 
     private String generateVerificationToken(User user) {

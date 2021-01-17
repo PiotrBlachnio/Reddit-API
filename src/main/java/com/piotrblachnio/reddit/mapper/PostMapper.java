@@ -24,7 +24,6 @@ public abstract class PostMapper {
     @Autowired
     private AuthService authService;
 
-
     @Mapping(target = "createdDate", expression = "java(java.time.Instant.now())")
     @Mapping(target = "description", source = "postRequest.description")
     @Mapping(target = "subreddit", source = "subreddit")
@@ -41,19 +40,19 @@ public abstract class PostMapper {
     @Mapping(target = "downVote", expression = "java(isPostDownVoted(post))")
     public abstract PostResponse mapToDto(Post post);
 
-    Integer commentCount(Post post) {
+    public Integer commentCount(Post post) {
         return commentRepository.findByPost(post).size();
     }
 
-    String getDuration(Post post) {
+    public String getDuration(Post post) {
         return TimeAgo.using(post.getCreatedDate().toEpochMilli());
     }
 
-    boolean isPostUpVoted(Post post) {
+    public boolean isPostUpVoted(Post post) {
         return checkVoteType(post, UPVOTE);
     }
 
-    boolean isPostDownVoted(Post post) {
+    public boolean isPostDownVoted(Post post) {
         return checkVoteType(post, DOWNVOTE);
     }
 
@@ -67,5 +66,4 @@ public abstract class PostMapper {
         }
         return false;
     }
-
 }
