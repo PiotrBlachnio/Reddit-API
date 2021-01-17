@@ -7,6 +7,8 @@ import java.util.UUID;
 
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "token")
 public class VerificationToken {
     private static final Integer MINUTES_30 = 1800000;
@@ -24,5 +26,5 @@ public class VerificationToken {
 
     private String token = UUID.randomUUID().toString();
 
-    private Instant expiryDate = Instant.now().plusMillis(MINUTES_30);
+    private Instant expiresAt = Instant.now().plusMillis(MINUTES_30);
 }

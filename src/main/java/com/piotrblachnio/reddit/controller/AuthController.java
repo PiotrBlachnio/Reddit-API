@@ -41,6 +41,6 @@ public class AuthController {
     @GetMapping(ApiRoutes.Auth.CONFIRM_EMAIL)
     @ResponseStatus(HttpStatus.OK)
     public void confirmEmail(@PathVariable String token) {
-        _authService.verifyAccount(token);
+        _authService.confirmEmail(token);
     }
 }
