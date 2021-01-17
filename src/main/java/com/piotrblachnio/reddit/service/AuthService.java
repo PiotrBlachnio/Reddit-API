@@ -33,6 +33,14 @@ public class AuthService {
 
     @Transactional
     public void register(RegisterRequest registerRequest) {
+        userRepository.findByEmail(registerRequest.getEmail()).ifPresent(value -> {
+            throw new SpringRedditException("Provided email already exists");
+        });
+
+        userRepository.findByUsername(registerRequest.getUsername()).ifPresent(value -> {
+            throw new SpringRedditException("Provided username already exists");
+        });
+
         var user = userMapper.mapRegisterRequestToUser(registerRequest);
 
         userRepository.save(user);
@@ -46,14 +54,10 @@ public class AuthService {
     public AuthenticationResponse login(LoginRequest loginRequest) {
         var authentication = _authenticateUser(loginRequest);
 
-        var token = jwtProvider.generateToken(authentication);
+        var accessToken = jwtProvider.generateToken(authentication);
+        var refreshToken = refreshTokenService.generateRefreshToken().getToken();
 
-        return AuthenticationResponse.builder()
-                .authenticationToken(token)
-                .refreshToken(refreshTokenService.generateRefreshToken().getToken())
-                .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
-                .username(loginRequest.getUsername())
-                .build();
+        return new AuthenticationResponse(accessToken, refreshToken);
     }
 
     public void confirmEmail(String token) {
@@ -81,13 +85,11 @@ public class AuthService {
 
     public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
         refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
-        String token = jwtProvider.generateTokenWithUserName(refreshTokenRequest.getUsername());
-        return AuthenticationResponse.builder()
-                .authenticationToken(token)
-                .refreshToken(refreshTokenRequest.getRefreshToken())
-                .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
-                .username(refreshTokenRequest.getUsername())
-                .build();
+
+        var accessToken = jwtProvider.generateTokenWithUserName(refreshTokenRequest.getUsername());
+        var refreshToken = refreshTokenRequest.getRefreshToken();
+
+        return new AuthenticationResponse(accessToken, refreshToken);
     }
 
     public boolean isLoggedIn() {

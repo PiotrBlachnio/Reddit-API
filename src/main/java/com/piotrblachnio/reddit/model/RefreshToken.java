@@ -1,9 +1,6 @@
 package com.piotrblachnio.reddit.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import javax.persistence.*;
 import java.time.Instant;
 
@@ -18,5 +15,9 @@ public class RefreshToken {
 
     private String token;
 
-    private Instant createdDate;
+    private Instant createdDate = Instant.now();
+
+    public RefreshToken(String token) {
+        this.token = token;
+    }
 }

@@ -11,12 +11,10 @@ public abstract class UserMapper {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Mapping(target = "username", source = "registerRequest.username")
-    @Mapping(target = "email", source = "registerRequest.email")
-    @Mapping(target = "password", expression = "java(hashPassword(registerRequest.getPassword()))")
+    @Mapping(target = "password", expression = "java(hashPassword(registerRequest))")
     public abstract User mapRegisterRequestToUser(RegisterRequest registerRequest);
 
-    public String hashPassword(String password) {
-        return passwordEncoder.encode(password);
+    public String hashPassword(RegisterRequest registerRequest) {
+        return passwordEncoder.encode(registerRequest.getPassword());
     }
 }
