@@ -1,8 +1,6 @@
-package com.piotrblachnio.reddit.dto;
+package com.piotrblachnio.reddit.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor

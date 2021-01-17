@@ -1,4 +1,4 @@
-package com.piotrblachnio.reddit.dto;
+package com.piotrblachnio.reddit.dto.response;
 
 import lombok.*;
 import java.time.Instant;

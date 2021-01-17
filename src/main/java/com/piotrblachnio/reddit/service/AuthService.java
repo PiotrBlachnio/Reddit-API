@@ -1,6 +1,6 @@
 package com.piotrblachnio.reddit.service;
 
-import com.piotrblachnio.reddit.dto.AuthenticationResponse;
+import com.piotrblachnio.reddit.dto.response.AuthenticationResponse;
 import com.piotrblachnio.reddit.dto.request.LoginRequest;
 import com.piotrblachnio.reddit.dto.request.RefreshTokenRequest;
 import com.piotrblachnio.reddit.dto.request.RegisterRequest;

@@ -1,7 +1,7 @@
 package com.piotrblachnio.reddit.service;
 
-import com.piotrblachnio.reddit.dto.PostRequest;
-import com.piotrblachnio.reddit.dto.PostResponse;
+import com.piotrblachnio.reddit.dto.request.PostRequest;
+import com.piotrblachnio.reddit.dto.response.PostResponse;
 import com.piotrblachnio.reddit.exceptions.PostNotFoundException;
 import com.piotrblachnio.reddit.exceptions.SubredditNotFoundException;
 import com.piotrblachnio.reddit.mapper.PostMapper;

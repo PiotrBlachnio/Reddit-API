@@ -1,4 +1,4 @@
-package com.piotrblachnio.reddit.dto;
+package com.piotrblachnio.reddit.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SubredditDto {
+public class SubredditResponse {
     private Long id;
     private String name;
     private String description;

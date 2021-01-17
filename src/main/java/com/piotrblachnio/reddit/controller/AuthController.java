@@ -1,8 +1,8 @@
 package com.piotrblachnio.reddit.controller;
 
 import com.piotrblachnio.reddit.constants.ApiRoutes;
-import com.piotrblachnio.reddit.dto.*;
 import com.piotrblachnio.reddit.dto.request.*;
+import com.piotrblachnio.reddit.dto.response.AuthenticationResponse;
 import com.piotrblachnio.reddit.service.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,8 +1,8 @@
 package com.piotrblachnio.reddit.controller;
 
 import com.piotrblachnio.reddit.constants.ApiRoutes;
-import com.piotrblachnio.reddit.dto.PostRequest;
-import com.piotrblachnio.reddit.dto.PostResponse;
+import com.piotrblachnio.reddit.dto.request.PostRequest;
+import com.piotrblachnio.reddit.dto.response.PostResponse;
 import com.piotrblachnio.reddit.service.PostService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.*;

@@ -1,8 +1,8 @@
 package com.piotrblachnio.reddit.mapper;
 
 import com.github.marlonlom.utilities.timeago.TimeAgo;
-import com.piotrblachnio.reddit.dto.PostRequest;
-import com.piotrblachnio.reddit.dto.PostResponse;
+import com.piotrblachnio.reddit.dto.request.PostRequest;
+import com.piotrblachnio.reddit.dto.response.PostResponse;
 import com.piotrblachnio.reddit.model.*;
 import com.piotrblachnio.reddit.repository.CommentRepository;
 import com.piotrblachnio.reddit.repository.VoteRepository;
