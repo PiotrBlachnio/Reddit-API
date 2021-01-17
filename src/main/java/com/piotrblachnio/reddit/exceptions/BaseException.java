@@ -1,7 +1,6 @@
 package com.piotrblachnio.reddit.exceptions;
 
 import lombok.Data;
-import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 @Data
