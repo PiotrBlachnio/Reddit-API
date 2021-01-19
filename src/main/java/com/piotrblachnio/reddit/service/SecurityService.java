@@ -21,16 +21,7 @@ public class SecurityService implements UserDetailsService {
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) {
         var user = userRepository.findByEmail(email).orElseThrow(() -> new InvalidCredentialsException());
-
-        return new User(
-                user.getUsername(),
-                user.getPassword(),
-                user.isEnabled(),
-                true,
-                true,
-                true,
-                getAuthorities("USER")
-        );
+        return new User(user.getEmail(), user.getPassword(), user.isEnabled(), true, true, true, getAuthorities("USER"));
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(String role) {
