@@ -21,9 +21,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private JwtProvider jwtProvider;
 
-    @Qualifier("userDetailsServiceImpl")
+    @Qualifier("securityService")
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserDetailsService securityService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException  {
@@ -32,7 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if(StringUtils.hasText(jwt) && jwtProvider.validateToken(jwt)) {
             var username = jwtProvider.getUsernameFromJwt(jwt);
 
-            var userDetails = userDetailsService.loadUserByUsername(username);
+            var userDetails = securityService.loadUserByUsername(username);
             var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

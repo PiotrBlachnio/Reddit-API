@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @ControllerAdvice
 public class ApiExceptionHandler {
 
-    @ExceptionHandler(value = { RuntimeException.class, BaseException.class})
+    @ExceptionHandler(value = { RuntimeException.class, BaseException.class })
     public ResponseEntity<Object> handleException(RuntimeException exception) {
         var response = ExceptionResponse.fromRuntimeException(exception);
         var statusCode = HttpStatus.INTERNAL_SERVER_ERROR;

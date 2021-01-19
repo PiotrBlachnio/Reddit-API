@@ -43,9 +43,7 @@ public class AuthService {
 
         userRepository.save(user);
 
-        var token = _generateVerificationToken(user);
-
-        mailService.sendMail(new NotificationEmail("Please activate your account", user.getEmail(),"http://localhost:8080/api/v1/auth/confirm-email/" + token));
+        this._sendConfirmationMail(user);
     }
 
     @Transactional
@@ -95,14 +93,14 @@ public class AuthService {
         return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
     }
 
-    private String _generateVerificationToken(User user) {
+    private void _sendConfirmationMail(User user) {
         var token = UUID.randomUUID().toString();
 
         var verificationToken = new VerificationToken(user);
 
         verificationTokenRepository.save(verificationToken);
 
-        return token;
+        mailService.sendMail(new NotificationEmail("Please activate your account", user.getEmail(),"http://localhost:8080/api/v1/auth/confirm-email/" + token));
     }
 
     private Authentication _authenticateUser(LoginRequest loginRequest) {
