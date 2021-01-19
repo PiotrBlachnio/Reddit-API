@@ -2,6 +2,7 @@ package com.piotrblachnio.reddit.dto.response;
 
 import com.piotrblachnio.reddit.constants.Exception;
 import com.piotrblachnio.reddit.exceptions.BaseException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import lombok.*;
 
 @AllArgsConstructor
@@ -22,5 +23,10 @@ public class ExceptionResponse {
 
     public static ExceptionResponse fromBaseException(BaseException exception) {
         return new ExceptionResponse(new Error(exception.getMessage(), exception.getId()));
+    }
+
+    public static ExceptionResponse fromValidationException(MethodArgumentNotValidException exception) {
+        var message = exception.getBindingResult().getFieldError().getDefaultMessage();
+        return new ExceptionResponse(new Error(message, Exception.INVALID_INPUT));
     }
 }

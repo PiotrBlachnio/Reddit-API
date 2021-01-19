@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @ControllerAdvice
-public class ApiExceptionHandler {
+public class GeneralExceptionHandler {
 
     @ExceptionHandler(value = { RuntimeException.class, BaseException.class })
     public ResponseEntity<Object> handleException(RuntimeException exception) {
