@@ -14,16 +14,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.Instant;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 public class AuthService {
     private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
-    private final MailService mailService;
+    private final EventService eventService;
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
@@ -43,7 +41,7 @@ public class AuthService {
 
         userRepository.save(user);
 
-        this._sendConfirmationMail(user);
+        eventService.sendConfirmationMail(user);
     }
 
     @Transactional
@@ -91,16 +89,6 @@ public class AuthService {
     public boolean isLoggedIn() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
-    }
-
-    private void _sendConfirmationMail(User user) {
-        var token = UUID.randomUUID().toString();
-
-        var verificationToken = new VerificationToken(user);
-
-        verificationTokenRepository.save(verificationToken);
-
-        mailService.sendMail(new NotificationEmail("Please activate your account", user.getEmail(),"http://localhost:8080/api/v1/auth/confirm-email/" + token));
     }
 
     private Authentication _authenticateUser(LoginRequest loginRequest) {
