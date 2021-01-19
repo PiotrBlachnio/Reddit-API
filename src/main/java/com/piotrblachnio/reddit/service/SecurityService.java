@@ -19,8 +19,8 @@ public class SecurityService implements UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String username) {
-        var user= userRepository.findByUsername(username).orElseThrow(() -> new InvalidCredentialsException());
+    public UserDetails loadUserByUsername(String email) {
+        var user = userRepository.findByEmail(email).orElseThrow(() -> new InvalidCredentialsException());
 
         return new User(
                 user.getUsername(),
