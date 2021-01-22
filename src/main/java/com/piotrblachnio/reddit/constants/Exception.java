@@ -12,4 +12,5 @@ public class Exception {
     public static final Integer EMAIL_NOT_FOUND = 107;
     public static final Integer POST_NOT_FOUND = 108;
     public static final Integer USERNAME_NOT_FOUND = 109;
+    public static final Integer SUBREDDIT_NOT_FOUND = 110;
 }
