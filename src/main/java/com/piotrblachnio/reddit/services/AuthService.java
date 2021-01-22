@@ -9,7 +9,6 @@ import com.piotrblachnio.reddit.repositories.*;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
