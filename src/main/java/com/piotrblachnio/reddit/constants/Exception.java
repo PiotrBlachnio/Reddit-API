@@ -13,4 +13,5 @@ public class Exception {
     public static final Integer POST_NOT_FOUND = 108;
     public static final Integer USERNAME_NOT_FOUND = 109;
     public static final Integer SUBREDDIT_NOT_FOUND = 110;
+    public static final Integer DUPLICATE_VOTE = 111;
 }
