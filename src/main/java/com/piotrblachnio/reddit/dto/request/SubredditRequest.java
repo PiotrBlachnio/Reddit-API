@@ -1,9 +1,7 @@
 package com.piotrblachnio.reddit.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import javax.validation.constraints.NotEmpty;
 
 @Data
 @AllArgsConstructor
@@ -11,7 +9,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SubredditRequest {
     private Long id;
-    private String name;
-    private String description;
+
     private Integer numberOfPosts;
+
+    @NotEmpty(message = "Name cannot be empty")
+    private String name;
+
+    @NotEmpty(message = "Description cannot be empty")
+    private String description;
 }
