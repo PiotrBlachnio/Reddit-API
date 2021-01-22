@@ -1,6 +1,6 @@
 package com.piotrblachnio.reddit.security;
 
-import com.piotrblachnio.reddit.service.JwtService;
+import com.piotrblachnio.reddit.services.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

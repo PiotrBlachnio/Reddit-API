@@ -2,9 +2,9 @@ package com.piotrblachnio.reddit.mapper;
 
 import com.piotrblachnio.reddit.dto.request.CommentRequest;
 import com.piotrblachnio.reddit.dto.response.CommentResponse;
-import com.piotrblachnio.reddit.model.Comment;
-import com.piotrblachnio.reddit.model.Post;
-import com.piotrblachnio.reddit.model.User;
+import com.piotrblachnio.reddit.models.Comment;
+import com.piotrblachnio.reddit.models.Post;
+import com.piotrblachnio.reddit.models.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

@@ -2,8 +2,8 @@ package com.piotrblachnio.reddit.mapper;
 
 import com.piotrblachnio.reddit.dto.request.SubredditRequest;
 import com.piotrblachnio.reddit.dto.response.SubredditResponse;
-import com.piotrblachnio.reddit.model.Post;
-import com.piotrblachnio.reddit.model.Subreddit;
+import com.piotrblachnio.reddit.models.Post;
+import com.piotrblachnio.reddit.models.Subreddit;
 import org.mapstruct.*;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.piotrblachnio.reddit.mapper;
 
 import com.piotrblachnio.reddit.dto.request.RegisterRequest;
-import com.piotrblachnio.reddit.model.User;
+import com.piotrblachnio.reddit.models.User;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

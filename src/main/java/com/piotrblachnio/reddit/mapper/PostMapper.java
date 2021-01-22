@@ -3,16 +3,16 @@ package com.piotrblachnio.reddit.mapper;
 import com.github.marlonlom.utilities.timeago.TimeAgo;
 import com.piotrblachnio.reddit.dto.request.PostRequest;
 import com.piotrblachnio.reddit.dto.response.PostResponse;
-import com.piotrblachnio.reddit.model.*;
-import com.piotrblachnio.reddit.repository.CommentRepository;
-import com.piotrblachnio.reddit.repository.VoteRepository;
-import com.piotrblachnio.reddit.service.AuthService;
+import com.piotrblachnio.reddit.models.*;
+import com.piotrblachnio.reddit.repositories.CommentRepository;
+import com.piotrblachnio.reddit.repositories.VoteRepository;
+import com.piotrblachnio.reddit.services.AuthService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static com.piotrblachnio.reddit.model.VoteType.DOWNVOTE;
-import static com.piotrblachnio.reddit.model.VoteType.UPVOTE;
+import static com.piotrblachnio.reddit.models.VoteType.DOWNVOTE;
+import static com.piotrblachnio.reddit.models.VoteType.UPVOTE;
 
 @Mapper(componentModel = "spring")
 public abstract class PostMapper {
