@@ -54,13 +54,13 @@ public class AuthService {
     }
 
     public void confirmEmail(String token) {
-        var verificationToken = verificationTokenRepository.findByToken(token).orElseThrow(() -> new SpringRedditException("Provided token is invalid"));
+        var verificationToken = verificationTokenRepository.findByToken(token).orElseThrow(() -> new InvalidConfirmationTokenException());
 
         var isExpired = Instant.now().isAfter(verificationToken.getExpiresAt());
-        if(isExpired) throw new SpringRedditException("Provided token has already expired");
+        if(isExpired) throw new ExpiredTokenException();
 
-        var username = verificationToken.getUser().getUsername();
-        var user = userRepository.findByUsername(username).orElseThrow(() -> new SpringRedditException("User associated with the provided token does not exist"));
+        var email = verificationToken.getUser().getEmail();
+        var user = userRepository.findByEmail(email).orElseThrow(() -> new EmailNotFoundException());
 
         user.setConfirmed(true);
         userRepository.save(user);
@@ -70,8 +70,8 @@ public class AuthService {
 
     @Transactional(readOnly = true)
     public User getCurrentUser() {
-        var principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.
-                getContext().getAuthentication().getPrincipal();
+        var principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         return userRepository.findByUsername(principal.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
     }
@@ -79,7 +79,7 @@ public class AuthService {
     public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
         refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
 
-        var accessToken = jwtService.generateTokenWithUserName(refreshTokenRequest.getUsername());
+        var accessToken = jwtService.generateTokenWithUserName(refreshTokenRequest.getEmail());
         var refreshToken = refreshTokenRequest.getRefreshToken();
 
         return new AuthenticationResponse(accessToken, refreshToken);

@@ -29,13 +29,13 @@ public class AuthController {
 
     @PostMapping(ApiRoutes.Auth.LOGOUT)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void logout(@RequestBody RefreshTokenRequest refreshTokenRequest) {
-        refreshTokenService.deleteRefreshToken(refreshTokenRequest.getRefreshToken());
+    public void logout(@Valid @RequestBody LogoutRequest logoutRequest) {
+        refreshTokenService.deleteRefreshToken(logoutRequest.getRefreshToken());
     }
 
     @PostMapping(ApiRoutes.Auth.REFRESH_TOKEN)
     @ResponseStatus(HttpStatus.OK)
-    public AuthenticationResponse refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+    public AuthenticationResponse refreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
         return authService.refreshToken(refreshTokenRequest);
     }
 
