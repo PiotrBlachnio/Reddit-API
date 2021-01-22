@@ -5,8 +5,8 @@ import lombok.Data;
 import org.springframework.http.HttpStatus;
 
 @Data
-public class PostNotFoundException extends BaseException {
-    private String message = "Post with the provided id not found";
-    private Integer id = Exception.POST_NOT_FOUND;
+public class UsernameNotFoundException extends BaseException {
+    private String message = "Username not found";
+    private Integer id = Exception.USERNAME_NOT_FOUND;
     private HttpStatus httpStatus = HttpStatus.NOT_FOUND;
 }

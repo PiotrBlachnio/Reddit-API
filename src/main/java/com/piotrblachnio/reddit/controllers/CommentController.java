@@ -7,6 +7,8 @@ import com.piotrblachnio.reddit.services.CommentService;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import lombok.AllArgsConstructor;
+
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -15,18 +17,20 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping(ApiRoutes.Comment.CREATE)
-    public ResponseEntity create(@RequestBody CommentRequest commentRequest) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public void create(@Valid @RequestBody CommentRequest commentRequest) {
         commentService.save(commentRequest);
-        return new ResponseEntity(HttpStatus.CREATED);
     }
 
     @GetMapping(ApiRoutes.Comment.GET_BY_POST)
-    public ResponseEntity<List<CommentResponse>> getByPost(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.getAllCommentsForPost(id));
+    @ResponseStatus(HttpStatus.OK)
+    public List<CommentResponse> getByPost(@PathVariable Long id) {
+        return commentService.getAllCommentsForPost(id);
     }
 
     @GetMapping(ApiRoutes.Comment.GET_BY_USER)
-    public ResponseEntity<List<CommentResponse>> getByUser(@PathVariable String username) {
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.getAllCommentsForUser(username));
+    @ResponseStatus(HttpStatus.OK)
+    public List<CommentResponse> getByUser(@PathVariable String username) {
+        return commentService.getAllCommentsForUser(username);
     }
 }

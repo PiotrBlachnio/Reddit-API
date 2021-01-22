@@ -71,9 +71,7 @@ public class AuthService {
     @Transactional(readOnly = true)
     public User getCurrentUser() {
         var principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        return userRepository.findByUsername(principal.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
+        return userRepository.findByEmail(principal.getUsername()).orElseThrow(() -> new EmailNotFoundException());
     }
 
     public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {

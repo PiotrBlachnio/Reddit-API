@@ -23,8 +23,7 @@ public class VoteService {
 
     @Transactional
     public void vote(VoteRequest voteRequest) {
-        var post = postRepository.findById(voteRequest.getPostId())
-                .orElseThrow(() -> new PostNotFoundException("Post Not Found with ID - " + voteRequest.getPostId()));
+        var post = postRepository.findById(voteRequest.getPostId()).orElseThrow(() -> new PostNotFoundException());
         var voteByPostAndUser = voteRepository.findTopByPostAndUserOrderByVoteIdDesc(post, authService.getCurrentUser());
         if (voteByPostAndUser.isPresent() &&
                 voteByPostAndUser.get().getVoteType()
