@@ -1,5 +1,7 @@
 package com.piotrblachnio.reddit.security;
 
+import com.piotrblachnio.reddit.service.JwtService;
+import com.piotrblachnio.reddit.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,7 +21,7 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
-    private JwtProvider jwtProvider;
+    private JwtService jwtService;
 
     @Qualifier("securityService")
     @Autowired
@@ -29,8 +31,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException  {
         var jwt = getJwtFromRequest(request);
 
-        if(StringUtils.hasText(jwt) && jwtProvider.validateToken(jwt)) {
-            var username = jwtProvider.getUsernameFromJwt(jwt);
+        if(StringUtils.hasText(jwt) && jwtService.validateToken(jwt)) {
+            var username = jwtService.getUsernameFromJwt(jwt);
 
             var userDetails = securityService.loadUserByUsername(username);
             var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

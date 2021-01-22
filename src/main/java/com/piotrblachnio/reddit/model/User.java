@@ -21,5 +21,5 @@ public class User {
 
     private Instant created = Instant.now();
 
-    private boolean enabled = false;
+    private boolean isConfirmed = false;
 }

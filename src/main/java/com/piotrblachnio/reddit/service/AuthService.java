@@ -6,10 +6,8 @@ import com.piotrblachnio.reddit.exceptions.*;
 import com.piotrblachnio.reddit.mapper.UserMapper;
 import com.piotrblachnio.reddit.model.*;
 import com.piotrblachnio.reddit.repository.*;
-import com.piotrblachnio.reddit.security.JwtProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.*;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -23,7 +21,7 @@ public class AuthService {
     private final VerificationTokenRepository verificationTokenRepository;
     private final EventService eventService;
     private final AuthenticationManager authenticationManager;
-    private final JwtProvider jwtProvider;
+    private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
     private final UserMapper userMapper;
 
@@ -46,9 +44,10 @@ public class AuthService {
 
     @Transactional
     public AuthenticationResponse login(LoginRequest loginRequest) {
-        var authentication = _authenticateUser(loginRequest);
+        var authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        var accessToken = jwtProvider.generateToken(authentication);
+        var accessToken = jwtService.generateToken(authentication);
         var refreshToken = refreshTokenService.generateRefreshToken().getToken();
 
         return new AuthenticationResponse(accessToken, refreshToken);
@@ -63,7 +62,7 @@ public class AuthService {
         var username = verificationToken.getUser().getUsername();
         var user = userRepository.findByUsername(username).orElseThrow(() -> new SpringRedditException("User associated with the provided token does not exist"));
 
-        user.setEnabled(true);
+        user.setConfirmed(true);
         userRepository.save(user);
 
         verificationTokenRepository.deleteById(verificationToken.getId());
@@ -80,7 +79,7 @@ public class AuthService {
     public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
         refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
 
-        var accessToken = jwtProvider.generateTokenWithUserName(refreshTokenRequest.getUsername());
+        var accessToken = jwtService.generateTokenWithUserName(refreshTokenRequest.getUsername());
         var refreshToken = refreshTokenRequest.getRefreshToken();
 
         return new AuthenticationResponse(accessToken, refreshToken);
@@ -89,13 +88,5 @@ public class AuthService {
     public boolean isLoggedIn() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
-    }
-
-    private Authentication _authenticateUser(LoginRequest loginRequest) {
-        var authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        return authentication;
     }
 }
