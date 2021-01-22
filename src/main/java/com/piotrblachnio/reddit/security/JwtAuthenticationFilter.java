@@ -1,7 +1,6 @@
 package com.piotrblachnio.reddit.security;
 
 import com.piotrblachnio.reddit.service.JwtService;
-import com.piotrblachnio.reddit.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,12 +28,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException  {
-        var jwt = getJwtFromRequest(request);
+        var jwt = _getJwtFromRequest(request);
 
         if(StringUtils.hasText(jwt) && jwtService.validateToken(jwt)) {
-            var username = jwtService.getUsernameFromJwt(jwt);
+            var email = jwtService.getEmailFromJwt(jwt);
 
-            var userDetails = securityService.loadUserByUsername(username);
+            var userDetails = securityService.loadUserByUsername(email);
             var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -43,18 +42,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             filterChain.doFilter(request, response);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException exception) {
+            exception.printStackTrace();
         }
     }
 
-    private String getJwtFromRequest(HttpServletRequest request) {
-        var bearerToken = request.getHeader("Authorization");
+    private String _getJwtFromRequest(HttpServletRequest request) {
+        var token = request.getHeader("Authorization");
 
-        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+        if(StringUtils.hasText(token) && token.startsWith("Bearer ")) {
+            return token.substring(7);
         }
 
-        return bearerToken;
+        return token;
     }
 }

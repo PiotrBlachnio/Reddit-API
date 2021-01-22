@@ -12,7 +12,6 @@ import java.time.Instant;
 import java.util.Date;
 
 import static io.jsonwebtoken.Jwts.parser;
-import static java.util.Date.from;
 
 @Service
 public class JwtService {
@@ -29,10 +28,14 @@ public class JwtService {
 
     public String generateToken(Authentication authentication) {
         var principal = (User) authentication.getPrincipal();
+        return generateTokenWithUserName(principal.getUsername());
+    }
+
+    public String generateTokenWithUserName(String username) {
         return Jwts.builder()
-                .setSubject(principal.getUsername())
+                .setSubject(username)
                 .signWith(_getPrivateKey())
-                .setExpiration(from(Instant.now().plusMillis(Jwt.EXPIRES_IN)))
+                .setExpiration(Date.from(Instant.now().plusMillis(Jwt.EXPIRES_IN)))
                 .compact();
     }
 
@@ -41,22 +44,13 @@ public class JwtService {
         return true;
     }
 
-    public String getUsernameFromJwt(String token) {
+    public String getEmailFromJwt(String token) {
         var claims = parser()
                 .setSigningKey(_getPublicKey())
                 .parseClaimsJws(token)
                 .getBody();
 
         return claims.getSubject();
-    }
-
-    public String generateTokenWithUserName(String username) {
-        return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(from(Instant.now()))
-                .signWith(_getPrivateKey())
-                .setExpiration(Date.from(Instant.now().plusMillis(Jwt.EXPIRES_IN)))
-                .compact();
     }
 
     private PublicKey _getPublicKey() {
