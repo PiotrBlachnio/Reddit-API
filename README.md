@@ -1,5 +1,5 @@
 # Reddit API
-REST API created using Java & Spring Boot. It allows you to create subreddits, posts and comments.
+REST API created using Java & Spring Boot. It allows you to create subreddits, posts, and comments.
 You can also rate a post by leaving an up or down vote. You need to authenticate before retrieving
 or modifying any data.
 
