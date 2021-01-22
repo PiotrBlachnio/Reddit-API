@@ -1,6 +1,6 @@
 package com.piotrblachnio.reddit.services;
 
-import com.piotrblachnio.reddit.exceptions.SpringRedditException;
+import com.piotrblachnio.reddit.exceptions.InvalidRefreshTokenException;
 import com.piotrblachnio.reddit.models.RefreshToken;
 import com.piotrblachnio.reddit.repositories.RefreshTokenRepository;
 import lombok.AllArgsConstructor;
@@ -20,8 +20,7 @@ public class RefreshTokenService {
     }
 
     public void validateRefreshToken(String token) {
-        refreshTokenRepository.findByToken(token)
-                .orElseThrow(() -> new SpringRedditException("Invalid refresh Token"));
+        refreshTokenRepository.findByToken(token).orElseThrow(() -> new InvalidRefreshTokenException());
     }
 
     public void deleteRefreshToken(String token) {

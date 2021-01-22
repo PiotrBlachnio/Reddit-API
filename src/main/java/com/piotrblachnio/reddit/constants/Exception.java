@@ -6,4 +6,5 @@ public class Exception {
     public static final Integer DUPLICATE_EMAIL = 101;
     public static final Integer DUPLICATE_USERNAME = 102;
     public static final Integer INVALID_CREDENTIALS = 103;
+    public static final Integer INVALID_REFRESH_TOKEN = 104;
 }
